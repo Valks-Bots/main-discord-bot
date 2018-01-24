@@ -30,8 +30,9 @@ const commands = {
 	'invite': (msg) => {
 		sendEmbed(msg, msg.channel.id, 'https://discordapp.com/api/oauth2/authorize?client_id=403185760276185088&scope=bot&permissions=26624');
 	},
-	'ping': (msg) => {
-		
+	'say': (msg) => {
+		const args = msg.content.slice(2).trim().split(/ +/g).slice(1);
+		msg.channel.send(args.join(' '));
 	},
 	'xp': (msg) => {
 		sql.get('SELECT * FROM settings WHERE guildid = ?', [msg.guild.id]).then(row => {
@@ -261,12 +262,12 @@ client.login(tokens.token);
 function levelModule(msg){
 	// Handle Leveling Module
 	sql.get('SELECT * FROM settings WHERE guildid = ?', [msg.guild.id]).then(settings => {
-		if (settings.leveling !== "0") { // Check if the guild owner enabled leveling.
+		if (settings.leveling !== null) { // Check if the guild owner enabled leveling.
 			// Insert only if there are no duplicates.
 			sql.run('INSERT OR IGNORE INTO leveling (userid, xp, level) VALUES (?, ?, ?)', [msg.author.id, 0, 0]).then(() => {
 				sql.run('UPDATE leveling SET xp = xp + 1 WHERE userid = ?', [msg.author.id]);
 				sql.get('SELECT * FROM leveling WHERE userid = ?', [msg.author.id]).then(row => {
-					let curLevel = Math.floor(1.0 * Math.sqrt(row.xp + 1));
+					let curLevel = Math.floor(0.1 * Math.sqrt(row.xp + 1));
 					if (curLevel > row.level){
 						row.level = curLevel;
 						sql.run('UPDATE leveling SET level = level + 1 WHERE userid = ?', [msg.author.id]);
