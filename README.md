@@ -1,0 +1,1 @@
+A Discord.js bot with a current primary goal of becoming a leveling bot; when a user types a message in any channel, they will receive xp, enough xp will get them to the next level.
