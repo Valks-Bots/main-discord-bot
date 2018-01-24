@@ -47,6 +47,9 @@ const commands = {
 		// Grab xp values of specified user.
 	},
 	'settings': (msg) => {
+		if (!msg.member.hasPermission('ADMINISTRATOR')){
+			return sendEmbed(msg, msg.channel.id, 'You need to have the administrator permission to do this.');
+		}
 		const args = msg.content.slice(tokens.prefix.length).trim().split(/ +/g).slice(1);
 		const string = msg.content.slice(tokens.prefix.length).trim().split(/ +/g).slice(3).join(' ');
 		const valid = ['leveling', 'streaming', 'welcome', 'farewell', 'joinrole', 'welcomemsg', 'farewellmsg', 'invites'];
